@@ -1,1 +1,25 @@
-Hii
+---
+- hosts: test
+  connection: ssh
+
+  tasks:
+    - name: copy the folder
+      copy:
+        src: "/root/jenkins.sh"
+        dest: "/root/jenkins.sh"
+        mode: 0755
+      notify: starting the jenkins
+
+
+
+  handlers:
+    - name: starting the jenkins
+      shell: nohup /root/jenkins.sh
+
+    - name: status of jenkins
+      command: systemctl is-active jenkins
+      register: abc
+
+    - name: status of jenkins
+      debug:
+        msg: print status {{abc.stdout}}
